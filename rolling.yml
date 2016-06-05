@@ -21,7 +21,7 @@
   pre_tasks:
 
   - name: disable server in haproxy
-    shell: echo "disable server episode46/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+    shell: echo "disable server/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
     delegate_to: "{{ item }}"
     with_items: groups.lb
 
@@ -42,11 +42,6 @@
     #shell: rm -f /usr/share/nginx/html/*
     file: path=/usr/share/nginx/html/ state=absent
 
-  - name: deploy website content
-    git: repo=https://github.com/jweissig/episode-47.git
-         dest=/usr/share/nginx/html/
-         version={{ app_version }}
-
   handlers:
 
   - name: restart nginx
@@ -55,7 +50,7 @@
   post_tasks:
 
   - name: enable server in haproxy
-    shell: echo "enable server episode46/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
+    shell: echo "enable server /{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats
     delegate_to: "{{ item }}"
     with_items: groups.lb
 
